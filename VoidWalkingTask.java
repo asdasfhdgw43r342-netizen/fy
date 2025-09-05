@@ -44,11 +44,11 @@ public class VoidWalkingTask extends BukkitRunnable {
         }
         
         // Only create platform if player is falling or near void
-        if (playerLoc.getY() <= 10) {
+        if (playerLoc.getY() <= 15) {
             // Create glass platform under the player
             int centerX = playerLoc.getBlockX();
             int centerZ = playerLoc.getBlockZ();
-            int platformY = (int) Math.floor(playerLoc.getY() - 0.5); // Platform right under player's feet
+            int platformY = (int) Math.floor(playerLoc.getY() - 1.0); // Platform 1 block under player's feet
             
             // Create a 3x3 glass platform
             for (int x = centerX - 1; x <= centerX + 1; x++) {
@@ -58,7 +58,7 @@ public class VoidWalkingTask extends BukkitRunnable {
                     
                     if (block.getType() == Material.AIR && blockLoc.getY() >= 0) {
                         block.setType(Material.GLASS);
-                        temporaryBlocks.put(blockLoc.clone(), System.currentTimeMillis() + 5000); // Remove after 5 seconds
+                        temporaryBlocks.put(blockLoc.clone(), System.currentTimeMillis() + 3000); // Remove after 3 seconds
                     }
                 }
             }

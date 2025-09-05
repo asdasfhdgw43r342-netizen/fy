@@ -43,7 +43,7 @@ public class DragonHeadManager implements Listener {
         Player player = event.getPlayer();
         
         // Let the VoidWalkingTask handle platform creation
-        if (hasAugmentedVoidEffects(player) && player.getLocation().getY() < 5) {
+        if (hasAugmentedVoidEffects(player) && player.getLocation().getY() < 15) {
             // Just reset fall distance, let them move naturally on the glass platforms
             player.setFallDistance(0);
         }
