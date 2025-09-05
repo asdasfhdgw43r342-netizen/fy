@@ -42,16 +42,10 @@ public class DragonHeadManager implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         
-        // Check if player has Augmented Void effects and is near void
-        if (hasAugmentedVoidEffects(player) && player.getLocation().getY() < 15) {
-            // Create platform under player if they're about to fall into void
-            if (event.getTo().getY() < 10) {
-                event.setTo(event.getFrom().clone().add(0, 1, 0));
-                player.setFallDistance(0);
-                player.setVelocity(new Vector(0, 0.5, 0));
-                
-                createVoidPlatform(player);
-            }
+        // Let the VoidWalkingTask handle platform creation
+        if (hasAugmentedVoidEffects(player) && player.getLocation().getY() < 5) {
+            // Just reset fall distance, let them move naturally on the glass platforms
+            player.setFallDistance(0);
         }
     }
     

@@ -19,13 +19,13 @@ public class PlayerAbilityManager implements Listener {
     private final Map<UUID, Boolean> abilityActive = new HashMap<>();
     private final PotionManager potionManager;
     
-    private static final long ABILITY_COOLDOWN = 30 * 1000; // 30 seconds in milliseconds
-    private static final long ABILITY_DURATION = 20 * 1000; // 20 seconds active duration
-    private static final int WITHER_EFFECT_DURATION = 400; // 20 seconds
+    private static final long ABILITY_COOLDOWN = 90 * 1000; // 1.30 minutes (90 seconds) in milliseconds
+    private static final long ABILITY_DURATION = 60 * 1000; // 1 minute active duration
+    private static final int WITHER_EFFECT_DURATION = 300; // 15 seconds (300 ticks)
     private static final int WITHER_EFFECT_AMPLIFIER = 1; // Wither II
-    private static final int SLOWNESS_EFFECT_DURATION = 400; // 20 seconds
+    private static final int SLOWNESS_EFFECT_DURATION = 300; // 15 seconds (300 ticks)
     private static final int SLOWNESS_EFFECT_AMPLIFIER = 1; // Slowness II
-    private static final int BLINDNESS_EFFECT_DURATION = 400; // 20 seconds
+    private static final int BLINDNESS_EFFECT_DURATION = 300; // 15 seconds (300 ticks)
     private static final int BLINDNESS_EFFECT_AMPLIFIER = 0; // Blindness I
     
     public PlayerAbilityManager(PotionManager potionManager) {
@@ -43,8 +43,13 @@ public class PlayerAbilityManager implements Listener {
         if (lastAbilityUse.containsKey(playerId)) {
             long lastUse = lastAbilityUse.get(playerId);
             if (currentTime - lastUse < ABILITY_COOLDOWN) {
-                long remaining = (ABILITY_COOLDOWN - (currentTime - lastUse)) / 1000;
-                player.sendMessage(Component.text("Ability is on cooldown for " + remaining + " more seconds", 
+                long remainingMs = ABILITY_COOLDOWN - (currentTime - lastUse);
+                long remainingMinutes = remainingMs / (60 * 1000);
+                long remainingSeconds = (remainingMs % (60 * 1000)) / 1000;
+                String timeText = remainingMinutes > 0 ? 
+                    remainingMinutes + "m " + remainingSeconds + "s" : 
+                    remainingSeconds + "s";
+                player.sendMessage(Component.text("Ability is on cooldown for " + timeText + " more", 
                     NamedTextColor.RED));
                 return;
             }
@@ -72,7 +77,7 @@ public class PlayerAbilityManager implements Listener {
         // Set cooldown
         lastAbilityUse.put(playerId, currentTime);
         
-        player.sendMessage(Component.text("Void ability activated! Your next attacks will inflict void effects for 20 seconds.", NamedTextColor.DARK_PURPLE));
+        player.sendMessage(Component.text("Void ability activated! Your attacks will inflict void effects for 1 minute.", NamedTextColor.DARK_PURPLE));
     }
     
     private void activateAbility(Player player, int abilityLevel) {
@@ -85,10 +90,10 @@ public class PlayerAbilityManager implements Listener {
             () -> {
                 abilityActive.remove(playerId);
                 if (player.isOnline()) {
-                    player.sendMessage(Component.text("Void ability has worn off.", NamedTextColor.GRAY));
+                    player.sendMessage(Component.text("Void ability has worn off. Cooldown: 1.5 minutes.", NamedTextColor.GRAY));
                 }
             }, 
-            400L // 20 seconds in ticks
+            1200L // 60 seconds in ticks (1 minute)
         );
     }
     

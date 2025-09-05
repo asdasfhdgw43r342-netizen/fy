@@ -39,25 +39,32 @@ public class VoidWalkingTask extends BukkitRunnable {
         Location playerLoc = player.getLocation();
         World world = playerLoc.getWorld();
         
-        if (world == null || playerLoc.getY() > 10) {
+        if (world == null || playerLoc.getY() > 15) {
             return;
         }
         
-        // Create temporary blocks under the player
-        int centerX = playerLoc.getBlockX();
-        int centerZ = playerLoc.getBlockZ();
-        int platformY = (int) (playerLoc.getY() - 1);
-        
-        for (int x = centerX - 2; x <= centerX + 2; x++) {
-            for (int z = centerZ - 2; z <= centerZ + 2; z++) {
-                Location blockLoc = new Location(world, x, platformY, z);
-                Block block = world.getBlockAt(blockLoc);
-                
-                if (block.getType() == Material.AIR && blockLoc.getY() >= 0) {
-                    block.setType(Material.BARRIER);
-                    temporaryBlocks.put(blockLoc.clone(), System.currentTimeMillis() + 3000); // Remove after 3 seconds
+        // Only create platform if player is falling or near void
+        if (playerLoc.getY() <= 10) {
+            // Create glass platform under the player
+            int centerX = playerLoc.getBlockX();
+            int centerZ = playerLoc.getBlockZ();
+            int platformY = (int) Math.floor(playerLoc.getY() - 0.5); // Platform right under player's feet
+            
+            // Create a 3x3 glass platform
+            for (int x = centerX - 1; x <= centerX + 1; x++) {
+                for (int z = centerZ - 1; z <= centerZ + 1; z++) {
+                    Location blockLoc = new Location(world, x, platformY, z);
+                    Block block = world.getBlockAt(blockLoc);
+                    
+                    if (block.getType() == Material.AIR && blockLoc.getY() >= 0) {
+                        block.setType(Material.GLASS);
+                        temporaryBlocks.put(blockLoc.clone(), System.currentTimeMillis() + 5000); // Remove after 5 seconds
+                    }
                 }
             }
+            
+            // Reset fall distance to prevent damage
+            player.setFallDistance(0);
         }
     }
     
@@ -67,7 +74,7 @@ public class VoidWalkingTask extends BukkitRunnable {
             if (entry.getValue() <= currentTime) {
                 Location loc = entry.getKey();
                 Block block = loc.getWorld().getBlockAt(loc);
-                if (block.getType() == Material.BARRIER) {
+                if (block.getType() == Material.GLASS) {
                     block.setType(Material.AIR);
                 }
                 return true;
