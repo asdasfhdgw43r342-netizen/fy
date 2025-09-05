@@ -18,25 +18,20 @@ public class VoidStatusEffectTask extends BukkitRunnable {
     
     @Override
     public void run() {
-        // Apply status effect to show VOID in GUI
+        // Apply invisible status effect to show VOID icon in GUI
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (potionManager.hasActivePotionEffect(player)) {
-                // Apply a custom effect that will show as "Void" in inventory
-                // Using LUCK effect renamed to show as void theme
+                // Apply a harmless invisible effect that shows the custom icon
+                // Using LUCK effect with custom model data for the icon
                 PotionEffect voidEffect = new PotionEffect(
                     PotionEffectType.LUCK, 
                     100, // 5 seconds duration (refreshed every 4 seconds)
                     0, // Level 1
                     true, // Ambient (less particles)
-                    false, // No particles  
+                    false, // No particles
                     true // Show icon
                 );
                 player.addPotionEffect(voidEffect);
-            } else {
-                // Remove the effect if player no longer has void potion active
-                if (player.hasPotionEffect(PotionEffectType.LUCK)) {
-                    player.removePotionEffect(PotionEffectType.LUCK);
-                }
             }
         }
     }
