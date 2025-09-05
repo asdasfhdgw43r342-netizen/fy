@@ -22,9 +22,9 @@ public class VoidStatusEffectTask extends BukkitRunnable {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (potionManager.hasActivePotionEffect(player)) {
                 // Apply a custom effect that will show as "Void" in inventory
-                // Using DARKNESS effect which is closest to void theme
+                // Using LUCK effect renamed to show as void theme
                 PotionEffect voidEffect = new PotionEffect(
-                    PotionEffectType.DARKNESS, 
+                    PotionEffectType.LUCK, 
                     100, // 5 seconds duration (refreshed every 4 seconds)
                     0, // Level 1
                     true, // Ambient (less particles)
@@ -34,8 +34,8 @@ public class VoidStatusEffectTask extends BukkitRunnable {
                 player.addPotionEffect(voidEffect);
             } else {
                 // Remove the effect if player no longer has void potion active
-                if (player.hasPotionEffect(PotionEffectType.DARKNESS)) {
-                    player.removePotionEffect(PotionEffectType.DARKNESS);
+                if (player.hasPotionEffect(PotionEffectType.LUCK)) {
+                    player.removePotionEffect(PotionEffectType.LUCK);
                 }
             }
         }
