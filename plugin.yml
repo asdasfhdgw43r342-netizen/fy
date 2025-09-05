@@ -1,0 +1,30 @@
+name: AugmentedVoid
+version: 1.0.0
+main: com.augmentedvoid.AugmentedVoidPlugin
+api-version: '1.21'
+author: YourName
+description: Adds Augmented Void potion with dragon head mechanics
+
+commands:
+  augmentedvoid:
+    description: Main plugin command
+    usage: /<command>
+    permission: augmentedvoid.admin
+    permission-message: You don't have permission to use this command.
+  userability:
+    description: Use void ability
+    usage: /<command> <1>
+    permission-message: You don't have permission to use this command.
+  userdrain:
+    description: Drain void effect back into potion
+    usage: /<command> <1>
+    permission-message: You don't have permission to use this command.
+  userrecipe:
+    description: Show VOID potion crafting recipe
+    usage: /<command>
+    permission-message: You don't have permission to use this command.
+
+permissions:
+  augmentedvoid.admin:
+    description: Allows use of admin commands
+    default: op
